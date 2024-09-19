@@ -2,9 +2,7 @@
 var websocket; // 将 websocket 提升到全局作用域
 
 document.addEventListener('DOMContentLoaded', function () {
-    var wsUri = 'ws://cn-sz-yd-plustmp2.natfrp.cloud:47511/ws/nwpu-services';
-//    var wsUri = 'ws://192.168.31.116:8002/ws/nwpu-services';
-
+    var wsUri = 'wss://api.u1094922.nyat.app:39479/ws/nwpu-services';
 
     if ('WebSocket' in window) {
         websocket = new WebSocket(wsUri);
