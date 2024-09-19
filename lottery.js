@@ -1,34 +1,42 @@
 // lottery.js 文件
 var websocket; // 将 websocket 提升到全局作用域
 
-document.addEventListener('DOMContentLoaded', function () {
-    var wsUri = 'wss://api.u1094922.nyat.app:39479/ws/nwpu-services';
+let initWebSocket = () =>
+    {
+        var wsUri = 'wss://api.u1094922.nyat.app:39479/ws/nwpu-services';
 
-    if ('WebSocket' in window) {
-        websocket = new WebSocket(wsUri);
+        if ('WebSocket' in window) {
+            websocket = new WebSocket(wsUri);
 
-        websocket.onopen = function (evt) {
-            console.log("连接成功");
-        };
+            websocket.onopen = function (evt) {
+                console.log("连接成功");
+            };
 
-        websocket.onerror = function (evt) {
-            console.error("错误发生：" + evt.data);
-            handleConnectionError();
-        };
+            websocket.onerror = function (evt) {
+                console.error("错误发生：" + evt.data);
+                handleConnectionError();
+            };
 
-        websocket.onmessage = function (evt) {
-            console.log("接收到的消息：" + evt.data);
-            handleServerResponse(evt.data);
-        };
+            websocket.onmessage = function (evt) {
+                console.log("接收到的消息：" + evt.data);
+                handleServerResponse(evt.data);
+            };
 
-        websocket.onclose = function (evt) {
-            console.log("连接已关闭...");
-            handleConnectionClose();
-        };
-    } else {
-        alert('您的浏览器不支持WebSocket');
+            websocket.onclose = function (evt) {
+                console.log("连接已关闭...");
+                handleConnectionClose();
+            };
+        } else {
+            alert('您的浏览器不支持WebSocket');
+        }
     }
-});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // 页面加载完成后初始化 WebSocket 连接
+    initWebSocket();
+}
+    , false);
 
 function joinLottery(name_str) {
     if (!name_str.trim()) {
@@ -37,6 +45,7 @@ function joinLottery(name_str) {
     }
     if (!websocket || websocket.readyState !== WebSocket.OPEN) {
         alert('连接尚未建立，请稍后再试。');
+        initWebSocket();
         return;
     }
     websocket.send(JSON.stringify({ type: 'RAND', name: name_str }));
