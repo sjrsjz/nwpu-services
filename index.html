@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>抽奖页面</title>
     <style>
+        /* 样式代码保持不变 */
         #background-container {
             position: fixed;
             top: 0;
@@ -23,6 +24,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .container {
@@ -68,24 +70,52 @@
         button:hover {
             background: #0277bd;
         }
+
         .fullscreen {
             position: fixed;
             top: 10px;
             right: 10px;
-            padding: 5px; /* 减小按钮尺寸 */
-            font-size: 0.8em; /* 减小字体大小 */
-            background: rgba(255, 255, 255, 0.1); /* 使背景颜色更透明 */
-            color: rgba(0, 0, 0, 0.5); /* 使文字颜色更淡 */
+            padding: 5px;
+            /* 减小按钮尺寸 */
+            font-size: 0.8em;
+            /* 减小字体大小 */
+            background: rgba(255, 255, 255, 0.1);
+            /* 使背景颜色更透明 */
+            color: rgba(0, 0, 0, 0.5);
+            /* 使文字颜色更淡 */
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease, color 0.3s ease; /* 添加颜色过渡效果 */
+            transition: background 0.3s ease, color 0.3s ease;
+            /* 添加颜色过渡效果 */
+        }
+
+        .changemode {
+            position: fixed;
+            top: 10px;
+            right: 100px;
+            padding: 5px;
+            /* 减小按钮尺寸 */
+            font-size: 0.8em;
+            /* 减小字体大小 */
+            background: rgba(255, 255, 255, 0.1);
+            /* 使背景颜色更透明 */
+            color: rgba(0, 0, 0, 0.5);
+            /* 使文字颜色更淡 */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+            /* 添加颜色过渡效果 */
         }
 
         .fullscreen:hover {
-            background: rgba(255, 255, 255, 0.2); /* 鼠标悬停时稍微增加背景透明度 */
-            color: rgba(0, 0, 0, 0.7); /* 鼠标悬停时稍微增加文字颜色 */
+            background: rgba(255, 255, 255, 0.2);
+            /* 鼠标悬停时稍微增加背景透明度 */
+            color: rgba(0, 0, 0, 0.7);
+            /* 鼠标悬停时稍微增加文字颜色 */
         }
+
         #result {
             color: green;
             font-weight: bold;
@@ -112,12 +142,25 @@
 
         /* 震动效果 */
         @keyframes shake {
-            0%, 100% { transform: translateX(0); } /* 确保动画开始和结束时都回到原点 */
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
 
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            /* 确保动画开始和结束时都回到原点 */
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+        }
 
         .shake {
             animation: shake 0.5s ease;
@@ -151,22 +194,53 @@
                 transform: translateY(-15px);
             }
         }
+
+        .qr-codes {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            position: absolute;
+            bottom: 20px;
+            background: rgba(155, 155, 155, 0.2); /* 增加透明度 */
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .qr-codes img {
+            width: 200px;
+            height: 200px;
+            margin: 0 20px;
+            opacity: 0.7;
+        }
     </style>
+
+    <script type="module" src="lottery.js"></script>
 </head>
 
 <body>
+
     <div id="background-container">
-    <button onclick="toggleFullScreen()" class="fullscreen">全屏显示</button>
+        <button onclick="toggleFullScreen()" class="fullscreen">全屏显示</button>
+        <button onclick="changeMode()" class="changemode">切换显示</button> <!-- 添加切换按钮 -->
         <script src="slider.js"></script>
+
     </div>
     <div class="container" id="container" onclick="addRippleEffect(event)">
         <h1>欢迎参加抽奖活动！</h1>
         <input type="text" id="name" placeholder="请输入您的名字">
         <button onclick="joinLottery()">立即抽奖</button>
+
         <p id="result"></p>
     </div>
 
-    <script src="lottery.js"></script>
+    <!-- 插入三个二维码 -->
+    <div class="qr-codes">
+        <img src="imgs/qr_code_community.png" alt="Community">
+        <img src="imgs/qr_code_wiki.png" alt="Wiki">
+        <img src="imgs/qr_code_npuskin.png" alt="NPUSkin">
+    </div>
+
 </body>
 
 </html>
