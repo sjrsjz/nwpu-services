@@ -1,5 +1,5 @@
 var websocket;
-
+const probability = 0.25;
 const baseUri = 'api.u1094922.nyat.app:43333';
 let initWebSocket = () => {
     var wsUri = `wss://${baseUri}/ws/nwpu-services/lottery`;
@@ -165,6 +165,7 @@ class NWPUStudent {
                 break;
             case "error":
                 console.error("服务器错误：" + message.message);
+                this.handleServerError();
                 break;
             default:
                 console.warn("未知消息类型：" + message.type);
@@ -197,10 +198,21 @@ class NWPUStudent {
         showResult = true;
         scanElement.innerHTML = `<h2># 登录成功 #</h2>`;
         
+        setTimeout(() => {
+        }, 1000);
+
+        if (message.rand_num/100.0 < probability) {
+            scanElement.innerHTML += '<h2>恭喜您，中奖了！(≧∇≦)ﾉ</h2>';
+            scanElement.innerHTML += '<h2>您的幸运数字是：' + message.rand_num + '</h2>';
+        }
+        else {
+            scanElement.innerHTML += '<h2>很遗憾，未中奖。(っ °Д °;)っ</h2>';
+            scanElement.innerHTML += '<h2>您的数字是：' + message.rand_num + '</h2>';
+        }
         // 显示结果
-        scanElement.innerHTML += '<p>您的学号：' + message.uid + '</p>';
-        scanElement.innerHTML += '<p>您的姓名：' + message.name + '</p>';
-        scanElement.innerHTML += '<p>您的RAND：' + message.rand_num + '</p>';
+        //scanElement.innerHTML += '<p>您的学号：' + message.uid + '</p>';
+        //scanElement.innerHTML += '<p>您的姓名：' + message.name + '</p>';
+        //scanElement.innerHTML += '<p>您的RAND：' + message.rand_num + '</p>';
         // 加入一个确认按钮
         scanElement.innerHTML += '<button onclick="confirmRand()">继续</button>';
     }
@@ -216,7 +228,13 @@ class NWPUStudent {
         console.log("WebSocket连接关闭，尝试重新连接...");
         this.initWebSocket(); // 尝试重新建立连接
     }
-
+    handleServerError() {
+        // 服务器错误处理逻辑
+        this.cancelLogin();
+        setTimeout(() => {
+            this.initWebSocket();
+        }, 1000);
+    }
     waitForComfirm() {
         // 等待确认逻辑
         console.log("等待确认...");
@@ -313,7 +331,11 @@ function handleServerResponse(data) {
 
         if (response.type === 'RAND') {
             if (typeof response.rand_num === 'number') {
-                resultElement.innerHTML = "恭喜！您抽中的数字是：" + response.rand_num;
+                if (response.rand_num/100.0 < probability) {
+                    resultElement.innerHTML = '恭喜您，中奖了！(≧∇≦)ﾉ<br>您的幸运数字是：' + response.rand_num;
+                } else {
+                    resultElement.innerHTML = '很遗憾，未中奖。(っ °Д °;)っ<br>您的数字是：' + response.rand_num;
+                }
             } else {
                 resultElement.innerHTML = "服务器返回的数据格式错误，请稍后再试。";
                 console.error('RAND类型响应中rand_num不是数字');
