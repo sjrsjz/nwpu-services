@@ -142,6 +142,7 @@ class NWPUStudent {
 
             this.websocket.onclose = () => {
                 console.log("连接已关闭...");
+                setTimeout(() => { }, 1000);
             };
         } else {
             alert('您的浏览器不支持WebSocket');
@@ -162,6 +163,10 @@ class NWPUStudent {
                 break;
             case "cancel_login":
                 this.cancelLogin();
+                break;
+            case "qr_code_expired":
+                this.cancelLogin();
+                console.log("二维码已过期，已重试。");
                 break;
             case "error":
                 console.error("服务器错误：" + message.message);
@@ -220,6 +225,7 @@ class NWPUStudent {
     handleConnectionError() {
         // 连接错误处理逻辑
         console.error("WebSocket连接错误，尝试重新连接...");
+        setTimeout(() => { }, 5000);
         this.initWebSocket(); // 尝试重新建立连接
     }
 
@@ -359,6 +365,8 @@ function handleConnectionError() {
 function handleConnectionClose() {
     console.log("WebSocket连接已关闭。");
     alert('连接已断开，请刷新页面重新开始。');
+    setTimeout(() => {
+    }, 1000);
 }
 
 function addRippleEffect(event) {
