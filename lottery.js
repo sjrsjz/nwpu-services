@@ -1,7 +1,7 @@
 var websocket;
 
 let initWebSocket = () => {
-    var wsUri = 'wss://api.u1094922.nyat.app:39479/ws/nwpu-services/lottery';
+    var wsUri = 'wss://api.u1094922.nyat.app:43333/ws/nwpu-services/lottery';
 
     if ('WebSocket' in window) {
         websocket = new WebSocket(wsUri);
