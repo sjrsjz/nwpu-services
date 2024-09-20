@@ -5,9 +5,19 @@
     <meta charset="UTF-8">
     <title>抽奖页面</title>
     <style>
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,18 +26,20 @@
         }
 
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 30px;
             text-align: center;
             width: 50%;
             max-width: 500px;
+            position: relative;
+            overflow: hidden;
             animation: fadeIn 1s ease-in-out;
         }
 
         h1 {
-            color: #ff6347;
+            color: #0288d1;
             font-size: 2.5em;
             margin-bottom: 20px;
             animation: bounce 1s infinite;
@@ -37,7 +49,7 @@
             padding: 15px;
             margin: 20px 0;
             width: 80%;
-            border: 2px solid #ff6347;
+            border: 2px solid #0288d1;
             border-radius: 5px;
             font-size: 1em;
         }
@@ -46,7 +58,7 @@
             padding: 15px 30px;
             font-size: 1.2em;
             color: white;
-            background: #ff6347;
+            background: #0288d1;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -54,14 +66,61 @@
         }
 
         button:hover {
-            background: #e5533d;
+            background: #0277bd;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 5px; /* 减小按钮尺寸 */
+            font-size: 0.8em; /* 减小字体大小 */
+            background: rgba(255, 255, 255, 0.1); /* 使背景颜色更透明 */
+            color: rgba(0, 0, 0, 0.5); /* 使文字颜色更淡 */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease; /* 添加颜色过渡效果 */
         }
 
+        .fullscreen:hover {
+            background: rgba(255, 255, 255, 0.2); /* 鼠标悬停时稍微增加背景透明度 */
+            color: rgba(0, 0, 0, 0.7); /* 鼠标悬停时稍微增加文字颜色 */
+        }
         #result {
             color: green;
             font-weight: bold;
             margin-top: 20px;
             font-size: 1.5em;
+        }
+
+        /* 涟漪效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 50, 50, 0.1);
+            transform: scale(0);
+            animation: rippleEffect 1s linear;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* 震动效果 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); } /* 确保动画开始和结束时都回到原点 */
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+
+        .shake {
+            animation: shake 0.5s ease;
         }
 
         @keyframes fadeIn {
@@ -96,12 +155,14 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="background-container">
+    <button onclick="toggleFullScreen()" class="fullscreen">全屏显示</button>
+        <script src="slider.js"></script>
+    </div>
+    <div class="container" id="container" onclick="addRippleEffect(event)">
         <h1>欢迎参加抽奖活动！</h1>
         <input type="text" id="name" placeholder="请输入您的名字">
-        <button onclick="joinLottery(
-            document.getElementById('name').value
-        )">立即抽奖</button>
+        <button onclick="joinLottery()">立即抽奖</button>
         <p id="result"></p>
     </div>
 
