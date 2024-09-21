@@ -1,5 +1,5 @@
 var websocket;
-const probability = 0.25;
+const probability = 0.5;
 const baseUri = 'api.u1094922.nyat.app:43333';
 let initWebSocket = () => {
     var wsUri = `wss://${baseUri}/ws/nwpu-services/lottery`;
