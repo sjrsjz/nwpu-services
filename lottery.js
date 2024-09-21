@@ -1,5 +1,5 @@
 var websocket;
-const probability = 0.25;
+const probability = 0.5;
 const baseUri = 'api.u1094922.nyat.app:43333';
 let initWebSocket = () => {
     var wsUri = `wss://${baseUri}/ws/nwpu-services/lottery`;
@@ -207,10 +207,12 @@ class NWPUStudent {
         }, 1000);
 
         if (message.rand_num/100.0 < probability) {
+            scanElement.innerHTML += '<h2>姓名：' + message.name + '</h2>';
             scanElement.innerHTML += '<h2>恭喜您，中奖了！(≧∇≦)ﾉ</h2>';
             scanElement.innerHTML += '<h2>您的幸运数字是：' + message.rand_num + '</h2>';
         }
         else {
+            scanElement.innerHTML += '<h2>姓名：' + message.name + '</h2>';
             scanElement.innerHTML += '<h2>很遗憾，未中奖。(っ °Д °;)っ</h2>';
             scanElement.innerHTML += '<h2>您的数字是：' + message.rand_num + '</h2>';
         }
